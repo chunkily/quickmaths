@@ -3,9 +3,7 @@
 
 	let textareaElement = $state<HTMLTextAreaElement>();
 
-	let text = $state(
-		'2 + 2 = 4\n4 - 1 = 3\n\\displaystyle x=\\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}'
-	);
+	let text = $state('2 + 2 = 4\n4 - 1 = 3\n x=\\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}');
 
 	let disableMultiline = $state(false);
 	let lines = $derived(
@@ -59,7 +57,7 @@
 			/>
 			<label
 				for="disable-multiline"
-				title="When unchecked, each line is rendered in a separate context. Check this when you intend to use multiline tex commands like \begin"
+				title="When unchecked, each line is rendered in a separate context. Check this when you intend to use multiline tex commands like \begin and \aligned"
 				>Disable multiline <i>(?)</i></label
 			>
 		</div>
@@ -77,8 +75,6 @@
 			<a
 				href="https://github.com/chunkily/quickmaths"
 				class="text-blue-500 visited:text-purple-500"
-				target="_blank"
-				rel="noopener noreferrer"
 			>
 				<img src="/github-mark.svg" alt="GitHub Logo" class="mr-1 inline h-4 w-4" />
 				GitHub
@@ -86,7 +82,7 @@
 		</p>
 		<p>
 			Built with
-			<a href="https://svelte.dev/">SvelteKit.</a>
+			<a href="https://svelte.dev/" class="text-blue-500 visited:text-purple-500">Svelte</a>
 		</p>
 	</div>
 </div>

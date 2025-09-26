@@ -5,7 +5,8 @@
 	let outputDiv: HTMLDivElement;
 	$effect(() => {
 		katex.render(text, outputDiv, {
-			throwOnError: false
+			throwOnError: false,
+			displayMode: true
 		});
 	});
 </script>
