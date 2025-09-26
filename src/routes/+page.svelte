@@ -1,18 +1,27 @@
 <script lang="ts">
 	import Equation from './Equation.svelte';
 
-	function clamp(min: number, max: number, value: number): number {
-		return Math.min(Math.max(value, min), max);
-	}
+	let textareaElement = $state<HTMLTextAreaElement>();
 
 	let text = $state(
 		'2 + 2 = 4\n4 - 1 = 3\n\\displaystyle x=\\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}'
 	);
-	let rows = $derived(clamp(4, 10, text.split('\n').length));
+
 	let disableMultiline = $state(false);
 	let lines = $derived(
 		disableMultiline ? [text] : text.split('\n').filter((line) => line.trim() !== '')
 	);
+
+	$effect(() => {
+		if (textareaElement) {
+			const hiddenDiv = document.getElementById('hidden-div');
+			if (hiddenDiv) {
+				hiddenDiv.style.width = `${textareaElement.clientWidth}px`;
+				hiddenDiv.textContent = text + '\u200b'; // Add zero-width space to prevent jumpy behavior
+				textareaElement.style.height = hiddenDiv.scrollHeight + 'px';
+			}
+		}
+	});
 </script>
 
 <div class="container mx-auto min-h-screen p-4">
@@ -24,7 +33,7 @@
 			target="_blank"
 			rel="noopener noreferrer">LaTeX</a
 		>
-		math expressions using
+		style math expressions using
 		<a
 			href="https://katex.org/"
 			class="text-blue-500 underline visited:text-purple-500"
@@ -35,11 +44,12 @@
 	<div class="mb-4">
 		<label for="math-input">Enter math expressions:</label>
 		<textarea
-			class="w-full rounded border border-gray-300 p-2"
+			bind:this={textareaElement}
+			class="min-h-24 w-full rounded border border-gray-300 p-2"
 			bind:value={text}
-			{rows}
 			id="math-input"
 		></textarea>
+		<div id="hidden-div"></div>
 		<div class="mt-2 flex items-center gap-2">
 			<input
 				type="checkbox"
@@ -50,7 +60,7 @@
 			<label
 				for="disable-multiline"
 				title="When unchecked, each line is rendered in a separate context. Check this when you intend to use multiline tex commands like \begin"
-				>Disable multiline <i>(i)</i></label
+				>Disable multiline <i>(?)</i></label
 			>
 		</div>
 	</div>
@@ -80,3 +90,16 @@
 		</p>
 	</div>
 </div>
+
+<style>
+	#hidden-div {
+		position: absolute;
+		visibility: hidden;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		width: 100%;
+		padding: 10px;
+		border: 1px solid #ccc;
+		box-sizing: border-box;
+	}
+</style>
